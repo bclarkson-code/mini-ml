@@ -40,7 +40,7 @@ class CrossValidationModel:
         cross_val_folds: int,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
-        Split the data into training and testing sets for cross-validation.
+        Randomly split the data into training and testing sets for cross-validation.
 
         Args:
             X (np.ndarray): The input data.
@@ -52,16 +52,15 @@ class CrossValidationModel:
             A tuple containing the training data, training targets, testing data,
             and testing targets.
         """
-        len_data = X.shape[0]
-        fold_size = len_data // cross_val_folds
-        test_start = fold * fold_size
-        test_end = (fold + 1) * fold_size
-        X_train = np.vstack(  # pylint: disable=invalid-name
-            [X[:test_start], X[test_end:]]
-        )
-        y_train = np.hstack([y[:test_start], y[test_end:]])
-        X_test = X[test_start:test_end]  # pylint: disable=invalid-name
-        y_test = y[test_start:test_end]
+        np.random.seed(0)
+        indices = np.arange(X.shape[0])
+        np.random.shuffle(indices)
+        test_indices = indices[fold::cross_val_folds]
+        train_indices = np.delete(indices, test_indices)
+        X_train = X[train_indices]  # pylint: disable=invalid-name
+        y_train = y[train_indices]
+        X_test = X[test_indices]  # pylint: disable=invalid-name
+        y_test = y[test_indices]
         return X_train, y_train, X_test, y_test
 
     def fit(
