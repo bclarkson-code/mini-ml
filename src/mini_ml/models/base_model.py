@@ -2,10 +2,12 @@
 A base class for all models. All models should inherit from this class.
 """
 
+from abc import ABC
+
 import numpy as np
 
 
-class BaseModel:
+class BaseModel(ABC):
     """
     Base class for all models.
     """
@@ -20,7 +22,7 @@ class BaseModel:
         self,
         X: np.ndarray,  # pylint: disable=invalid-name
         y: np.ndarray,  # pylint: disable=invalid-name
-    ) -> None:
+    ) -> "BaseModel":
         """
         Fit linear regression model to the input data.
 
@@ -33,7 +35,8 @@ class BaseModel:
 
         Returns
         -------
-        None
+        BaseModel :
+            Fitted model.
         """
         raise NotImplementedError
 
@@ -50,5 +53,31 @@ class BaseModel:
         -------
         numpy.ndarray
             Predicted target values.
+        """
+        raise NotImplementedError
+
+    def get_params(self) -> dict:
+        """
+        Get model parameters.
+
+        Returns
+        -------
+        dict
+            Model parameters.
+        """
+        raise NotImplementedError
+
+    def set_params(self, params: dict) -> "BaseModel":
+        """
+        Set model parameters.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Model parameters.
+
+        Returns
+        -------
+        None
         """
         raise NotImplementedError

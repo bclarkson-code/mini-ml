@@ -1,3 +1,7 @@
 .venv*
 *.ipynb
 *__pycache__*
+*.db
+.mypy_cache*
+debug*
+models*

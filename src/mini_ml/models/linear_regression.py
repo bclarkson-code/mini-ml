@@ -11,11 +11,12 @@ class LinearRegression(BaseModel):
     A linear regression model implemented with pure numpy.
     """
 
+    coef_: np.ndarray = np.array([])
+
     def __init__(self) -> None:
         """
-        Initialize NumpyLinearRegression object.
+        Initialize LinearRegression object.
         """
-        self.coef_ = None
 
     def _prepare_data(
         self, X: np.ndarray  # pylint: disable=invalid-name
@@ -73,3 +74,26 @@ class LinearRegression(BaseModel):
         """
         intercept = self.coef_[0]
         return X @ self.coef_[1:] + intercept
+
+    def get_params(self):
+        """
+        Get model parameters.
+        """
+        return {"coef_": self.coef_}
+
+    def set_params(self, params: dict) -> "LinearRegression":
+        """
+        Load model parameters.
+
+        Parameters
+        ----------
+        params : dict
+            Model parameters.
+
+        Returns
+        -------
+        LinearRegression
+            Model with loaded parameters.
+        """
+        self.coef_ = params["coef_"]
+        return self

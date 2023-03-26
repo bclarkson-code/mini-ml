@@ -1,7 +1,7 @@
 """
 A module containing a class for training a model with cross validation.
 """
-from typing import Tuple
+from typing import Callable, Tuple
 
 import numpy as np
 
@@ -14,7 +14,7 @@ class CrossValidationModel:
     as well as a model trained on the entire dataset.
     """
 
-    def __init__(self, model: object, metric: callable) -> None:
+    def __init__(self, model: BaseModel, metric: Callable) -> None:
         """
         Initialize CrossValidationModel object.
 
@@ -68,7 +68,7 @@ class CrossValidationModel:
         X: np.ndarray,  # pylint: disable=invalid-name
         y: np.ndarray,  # pylint: disable=invalid-name
         cross_val_folds: int = 5,
-    ) -> Tuple[np.float64, BaseModel]:
+    ) -> Tuple[float, BaseModel]:
         """
         Fit model to input data with cross validation.
 
@@ -92,10 +92,10 @@ class CrossValidationModel:
 
     def score(
         self,
-        X,  # pylint: disable=invalid-name
-        y,  # pylint: disable=invalid-name
-        cross_val_folds,
-    ):
+        X: np.ndarray,  # pylint: disable=invalid-name
+        y: np.ndarray,  # pylint: disable=invalid-name
+        cross_val_folds: int,
+    ) -> float:
         """
         Score the performance of the model on the input data with cross validation.
         """
@@ -111,4 +111,4 @@ class CrossValidationModel:
             y_pred = self.model.predict(X_test)
             score = self.metric(y_test, y_pred)
             scores[fold] = score
-        return scores.mean()
+        return float(scores.mean())
